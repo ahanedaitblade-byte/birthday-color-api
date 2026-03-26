@@ -1,4 +1,7 @@
-export default function handler(req, res) {
+import path from "path";
+import { promises as fs } from "fs";
+
+export default async function handler(req, res) {
   const { month, day } = req.query;
 
   if (!month || !day) {
@@ -6,7 +9,11 @@ export default function handler(req, res) {
   }
 
   try {
-    const data = require("../../colors.json");
+    // colors.json の絶対パスを取得
+    const filePath = path.join(process.cwd(), "colors.json");
+    const jsonData = await fs.readFile(filePath, "utf8");
+    const data = JSON.parse(jsonData);
+
     const key = `${month}-${day}`;
 
     if (!data[key]) {
@@ -15,6 +22,6 @@ export default function handler(req, res) {
 
     return res.status(200).json(data[key]);
   } catch (e) {
-    return res.status(500).json({ error: "サーバーエラー" });
+    return res.status(500).json({ error: "サーバーエラー", detail: e.message });
   }
 }
