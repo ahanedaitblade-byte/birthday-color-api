@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    // colors.json の絶対パスを取得
-    const filePath = path.join(process.cwd(), "colors.json");
+    // api/colors.json を読み込む
+    const filePath = path.join(process.cwd(), "api", "colors.json");
     const jsonData = await fs.readFile(filePath, "utf8");
     const data = JSON.parse(jsonData);
 
