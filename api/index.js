@@ -1,7 +1,15 @@
+import path from "path";
+import { promises as fs } from "fs";
+
 export default async function handler(req, res) {
+  // CORS 設定
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
   const { month, day } = req.query;
 
