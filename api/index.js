@@ -9,18 +9,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    // api/colors.json を読み込む
     const filePath = path.join(process.cwd(), "api", "colors.json");
     const jsonData = await fs.readFile(filePath, "utf8");
     const data = JSON.parse(jsonData);
 
-    const key = `${month}-${day}`;
+    // 配列から該当の日付を検索
+    const result = data.find(
+      (item) => item.month == month && item.day == day
+    );
 
-    if (!data[key]) {
+    if (!result) {
       return res.status(404).json({ error: "該当する誕生日カラーがありません" });
     }
 
-    return res.status(200).json(data[key]);
+    return res.status(200).json(result);
   } catch (e) {
     return res.status(500).json({ error: "サーバーエラー", detail: e.message });
   }
