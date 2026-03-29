@@ -1,7 +1,8 @@
-import path from "path";
-import { promises as fs } from "fs";
-
 export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
   const { month, day } = req.query;
 
   if (!month || !day) {
@@ -13,7 +14,6 @@ export default async function handler(req, res) {
     const jsonData = await fs.readFile(filePath, "utf8");
     const data = JSON.parse(jsonData);
 
-    // 配列から該当の日付を検索
     const result = data.find(
       (item) => item.month == month && item.day == day
     );
